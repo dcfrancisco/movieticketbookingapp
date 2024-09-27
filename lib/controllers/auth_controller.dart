@@ -57,7 +57,8 @@ class AuthController extends GetxController {
       await auth.signInWithEmailAndPassword(email: email, password: password);
       getSuccessSnackBar("Successfully logged in as ${_user.value!.email}");
     } on FirebaseAuthException catch (e) {
-      //define error
+      isLoging = false; // Reset isLoging in case of error
+      update();
       getErrorSnackBar("Login Failed", e);
     }
   }
@@ -66,30 +67,40 @@ class AuthController extends GetxController {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     isLoging = true;
     update();
+
     try {
-      googleSignIn.disconnect();
-    } catch (e) {}
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.disconnect();
+      }
+    } catch (e) {
+      print("Google Sign-In disconnect failed: $e");
+    }
+
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleAuth =
             await googleSignInAccount.authentication;
-        final crendentials = GoogleAuthProvider.credential(
+        final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-        await auth.signInWithCredential(crendentials);
+        await auth.signInWithCredential(credential);
         getSuccessSnackBar("Successfully logged in as ${_user.value!.email}");
       }
     } on FirebaseAuthException catch (e) {
+      isLoging = false; // Reset isLoging in case of error
+      update();
       getErrorSnackBar("Google Login Failed", e);
     } on PlatformException catch (e) {
+      isLoging = false; // Reset isLoging in case of error
+      update();
       getErrorSnackBar("Google Login Failed", e);
     }
   }
 
-  void forgorPassword(email) async {
+  void forgotPassword(email) async {
     try {
       await auth.sendPasswordResetEmail(email: email);
       getSuccessSnackBar("Reset mail sent successfully. Check mail!");
@@ -101,7 +112,7 @@ class AuthController extends GetxController {
   getErrorSnackBar(String message, _) {
     Get.snackbar(
       "Error",
-      "$message\n${_.message}",
+      "$message\n${_.message ?? 'An unexpected error occurred.'}",
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: MyTheme.redTextColor,
       colorText: Colors.white,
@@ -135,6 +146,11 @@ class AuthController extends GetxController {
   }
 
   void signOut() async {
-    await auth.signOut();
+    try {
+      await auth.signOut();
+      Get.offAll(() => const LoginScreen());
+    } catch (e) {
+      getErrorSnackBarNew("Error signing out: ${e.toString()}");
+    }
   }
 }

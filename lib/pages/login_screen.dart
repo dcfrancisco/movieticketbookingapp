@@ -22,7 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return Scaffold(
       backgroundColor: MyTheme.splash,
       resizeToAvoidBottomInset: false,
@@ -56,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 20,
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 padding: const EdgeInsets.all(19),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -125,7 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderSide: BorderSide.none,
                                 ),
                                 hintText: "Email address",
-                                hintStyle: const TextStyle(color: Colors.black45),
+                                hintStyle:
+                                    const TextStyle(color: Colors.black45),
                                 fillColor: MyTheme.greyColor,
                                 filled: true,
                               ),
@@ -136,10 +139,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               return Future.value(true);
                             },
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                             confirm: ElevatedButton(
                               onPressed: () {
-                                AuthController.instance.forgorPassword(forgotEmailController.text.trim());
+                                AuthController.instance.forgotPassword(
+                                    forgotEmailController.text.trim());
                                 forgotEmailController.text = "";
                                 Get.back();
                               },
@@ -163,13 +168,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: const Text(
                           "Forgot Password?",
-                          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
+                        AuthController.instance.login(
+                            emailController.text.trim(),
+                            passwordController.text.trim());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: MyTheme.splash,
@@ -234,7 +243,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextSpan(
                       text: "Sign up",
-                      style: const TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w700),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           //Navigator.push(context, MaterialPageRoute(builder: (_) => SignUpScreen()));
