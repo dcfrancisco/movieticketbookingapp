@@ -52,7 +52,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-        resValue "string", "firebase_api_key", (project.findProperty("FIREBASE_API_KEY") ?: "")
+        resValue "string", "firebase_api_key", (project.findProperty("flutter.firebaseApiKey") ?: "")
     }
 
     buildTypes {
